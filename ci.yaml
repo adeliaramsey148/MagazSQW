@@ -16,13 +16,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
       - uses: actions/cache@v2
         env:
-          cache-name: cache-maven-modules
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-build-${{ env.cache-name }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -33,7 +30,6 @@ jobs:
       - name: Test with Maven
         run: mvn test -B
       - name: Generate code coverage
-        run: mvn -Pgen-code-cov clean test jacoco:report
       # https://github.com/marketplace/actions/codecov
       - uses: codecov/codecov-action@v2
         with:
